@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<project name="complex" default="compile" basedir="D:\build\ant\workspace\complex">
+	<property file="build.properties"/>
+	<path id="all.classpath">
+		<pathelement path="${outputdir}"/>
+		<fileset dir="${lib}">
+			<include name="**/*.jar"/>
+		</fileset>
+	</path>
+	<target name="init">
+		<mkdir dir="${outputdir}"/>
+		<mkdir dir="${packagedir}"/>
+	</target>
+	<target name="compile" depends="init">
+		<copydir src="${config}" dest="${outputdir}"/>
+		<javac srcdir="${src}:${srcMain}" destdir="${outputdir}">
+			<classpath refid="all.classpath"/>
+		</javac>
+	</target>
+	<target name="package" depends="compile">
+		<mkdir dir="${packagedir}\lib"/>
+		<jar jarfile="${packagedir}\lib\${ant.project.name}-${version}.jar" basedir="${outputdir}"/>
+	</target>
+	<target name="clean">
+		<delete dir="outputdir"/>
+		<delete dir="packgedir"/>
+	</target>
+	<target name="run" depends="package">
+		<java classname="org.ant.demo.App" >
+			<classpath refid="all.classpath"/>
+		</java>
+	</target>
+	<target name="partCompile">
+		<javac srcdir="${destdir}"  destdir="${outputdir}">
+			<classpath refid="all.classpath"/>
+		</javac>
+	</target>
+</project>
